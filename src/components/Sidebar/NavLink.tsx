@@ -1,6 +1,6 @@
 import { Icon, Link as ChakraLink, Text, LinkProps as ChackraLinkProps } from "@chakra-ui/react";
-import Link from 'next/link';
 import { ElementType } from "react";
+import { ActiveLink } from "../ActiveLink";
 
 interface NavLinkProps extends ChackraLinkProps {
   children: string;
@@ -10,7 +10,7 @@ interface NavLinkProps extends ChackraLinkProps {
 
 export function NavLink({ children, icon, href, ...rest }: NavLinkProps) {
   return (
-    <Link href={href} passHref>
+    <ActiveLink href={href} passHref>
       <ChakraLink
         display='flex'
         align='center'
@@ -27,6 +27,6 @@ export function NavLink({ children, icon, href, ...rest }: NavLinkProps) {
           { children }
         </Text>
       </ChakraLink>
-    </Link>
+    </ActiveLink>
   );
 };
