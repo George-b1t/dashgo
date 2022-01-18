@@ -3,12 +3,12 @@ import { ElementType } from "react";
 import { ActiveLink } from "../ActiveLink";
 
 interface NavLinkProps extends ChackraLinkProps {
-  children: string;
+  child: string;
   icon: ElementType;
   href: string;
 };
 
-export function NavLink({ children, icon, href, ...rest }: NavLinkProps) {
+export function NavLink({ child, icon, href, ...rest }: NavLinkProps) {
   return (
     <ActiveLink href={href} passHref>
       <ChakraLink
@@ -24,7 +24,7 @@ export function NavLink({ children, icon, href, ...rest }: NavLinkProps) {
           ml='4'
           fontWeight='medium'
         >
-          { children }
+          { child }
         </Text>
       </ChakraLink>
     </ActiveLink>

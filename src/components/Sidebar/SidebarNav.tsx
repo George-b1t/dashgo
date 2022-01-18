@@ -11,24 +11,24 @@ export function SidebarNav() {
     >
       <NavSection title='GERAL'>
         <NavLink
-          children='Dashboard'
+          child='Dashboard'
           icon={ RiDashboardLine }
           href='/dashboard'
         />
         <NavLink
-          children='Usuários'
+          child='Usuários'
           icon={ RiContactsLine }
           href='/users'
         />
       </NavSection>
       <NavSection title='AUTOMAÇÃO'>
         <NavLink
-          children='Formulários'
+          child='Formulários'
           icon={ RiInputMethodLine }
           href='/forms'
         />
         <NavLink
-          children='Automação'
+          child='Automação'
           icon={ RiGitMergeLine }
           href='/automation'
         />
