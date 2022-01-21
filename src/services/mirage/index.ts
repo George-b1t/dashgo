@@ -25,14 +25,14 @@ export function makeServer() {
           };
 
           var preDate = new Date();
-          preDate.setDate(preDate.getDate() - 10);
+          preDate.setDate(preDate.getDate() - 30);
           
           return randomDate(preDate, new Date());
         }
       })
     },
     seeds(server) {
-      server.createList('user', 200)
+      server.createList('user', 10)
     },
     routes() {
       this.namespace = "api";
