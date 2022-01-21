@@ -1,4 +1,4 @@
-import { createServer, Model } from 'miragejs';
+import { createServer, Factory, Model } from 'miragejs';
 
 type User = {
   name: string;
@@ -11,6 +11,29 @@ export function makeServer() {
     models: {
       user: Model.extend<Partial<User>>({})
     },
+    factories: {
+      user: Factory.extend({
+        name(i: number) {
+          return `User ${i+1}`
+        },
+        email(i: number) {
+          return `user${i+1}@gmail.com`
+        },
+        createdAt() {
+          function randomDate(start: Date, end: Date) {
+            return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+          };
+
+          var preDate = new Date();
+          preDate.setDate(preDate.getDate() - 10);
+          
+          return randomDate(preDate, new Date());
+        }
+      })
+    },
+    seeds(server) {
+      server.createList('user', 200)
+    },
     routes() {
       this.namespace = "api";
       this.timing = 750;
@@ -19,6 +42,7 @@ export function makeServer() {
       this.post('/users');
 
       this.namespace = "";
+      this.passthrough();
     }
   });
 
