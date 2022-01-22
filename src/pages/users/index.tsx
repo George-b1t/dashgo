@@ -4,6 +4,7 @@ import {
   Checkbox,
   Flex,
   Heading,
+  HStack,
   Icon,
   Spinner,
   Table,
@@ -18,19 +19,27 @@ import {
 
 import Link from 'next/link';
 import { RiAddLine, RiPencilLine } from "react-icons/ri";
+import { FiRefreshCcw } from "react-icons/fi";
 
 import { Header } from "../../components/Header";
 import { Pagination } from "../../components/Pagination";
 import { Sidebar } from "../../components/Sidebar";
 
 import { useQuery } from 'react-query';
+import { api } from "../../services/api";
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  createdAt: string;
+};
 
 export default function UserList() {
-  const { data, isLoading, error } = useQuery('users', async () => {
-    const response = await fetch('http://localhost:3000/api/users');
-    const data = await response.json();
+  const { data, isLoading, isFetching, refetch, error } = useQuery('users', async () => {
+    const { data } = await api.get('/users');
 
-    const users = data.users.map(user => ({
+    const users: User[] = data.users.map((user: User) => ({
       id: user.id,
       name: user.name,
       email: user.email,
@@ -43,7 +52,7 @@ export default function UserList() {
 
     return users;
   }, {
-    staleTime: 1000 * 5 // 5 segundos
+    staleTime: 1000 * 60 // 60 segundos
   });
 
   const isWideVersion = useBreakpointValue({
@@ -79,22 +88,42 @@ export default function UserList() {
               fontWeight='normal'
             >
               Usuários
+              { !isLoading && isFetching && (
+                <Spinner
+                  size="sm"
+                  color="gray.500"
+                  ml="4"
+                />
+              ) }
             </Heading>
 
-            <Link href='/users/create' passHref>
+            <HStack>
               <Button
                 as='a'
                 size='sm'
                 fontSize='sm'
-                colorScheme='pink'
-                leftIcon={<Icon
-                  as={RiAddLine}
-                  fontSize='20'
-                />}
+                colorScheme='messenger'
+                cursor='pointer'
+                onClick={() => refetch()}
               >
-                Criar novo
+                <FiRefreshCcw />
               </Button>
-            </Link>
+
+              <Link href='/users/create' passHref>
+                <Button
+                  as='a'
+                  size='sm'
+                  fontSize='sm'
+                  colorScheme='pink'
+                  leftIcon={<Icon
+                    as={RiAddLine}
+                    fontSize='20'
+                  />}
+                >
+                  Criar novo
+                </Button>
+              </Link>
+            </HStack>
 
           </Flex>
 
