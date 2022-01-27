@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useQuery, UseQueryOptions } from "react-query";
 import { api } from "../api";
 
 interface User {
@@ -34,8 +34,9 @@ export async function getUsers(page: number) {
   };
 };
 
-export function useUsers(page: number) {
+export function useUsers(page: number, initialData: { users: User[]; totalCount: number}) {
   return useQuery(['users', page], () => getUsers(page), {
-    staleTime: 1000 * 60 * 10
+    staleTime: 1000 * 60 * 10,
+    initialData
   });
 };
