@@ -6,6 +6,7 @@ import {
   Heading,
   HStack,
   Icon,
+  Link,
   Spinner,
   Table,
   Tbody,
@@ -17,7 +18,7 @@ import {
   useBreakpointValue
 } from "@chakra-ui/react";
 
-import Link from 'next/link';
+import NextLink from 'next/link';
 import { RiAddLine, RiPencilLine } from "react-icons/ri";
 import { FiRefreshCcw } from "react-icons/fi";
 
@@ -27,6 +28,8 @@ import { Sidebar } from "../../components/Sidebar";
 
 import { useUsers } from "../../services/hooks/useUsers";
 import { useState } from "react";
+import { queryClient } from "../../services/queryClient";
+import { api } from "../../services/api";
 
 export default function UserList() {
   const [ page, setPage ] = useState(1);
@@ -36,6 +39,16 @@ export default function UserList() {
     base: false,
     lg: true
   });
+
+  async function handlePrefetchUser(userId: number) {
+    await queryClient.prefetchQuery(['user', userId], async () => {
+      const response = await api.get(`users/${userId}`);
+
+      return response.data;
+    }, {
+      staleTime: 1000 * 60 * 10
+    });
+  };
 
   return (
     <Box>
@@ -86,7 +99,7 @@ export default function UserList() {
                 <FiRefreshCcw />
               </Button>
 
-              <Link href='/users/create' passHref>
+              <NextLink href='/users/create' passHref>
                 <Button
                   as='a'
                   size='sm'
@@ -99,7 +112,7 @@ export default function UserList() {
                 >
                   Criar novo
                 </Button>
-              </Link>
+              </NextLink>
             </HStack>
 
           </Flex>
@@ -152,11 +165,13 @@ export default function UserList() {
                         </Td>
                         <Td>
                           <Box>
-                            <Text
-                              fontWeight='bold'
-                            >
-                              {user.name}
-                            </Text>
+                            <Link color='purple.400' onMouseEnter={() => handlePrefetchUser(Number(user.id))}>
+                              <Text
+                                fontWeight='bold'
+                              >
+                                {user.name}
+                              </Text>
+                            </Link>
                             <Text
                               fontSize='small'
                               color='gray.300'
